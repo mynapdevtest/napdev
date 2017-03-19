@@ -2,71 +2,23 @@
 <html>
 <head>
   <title>NET-A-PORTER webdev test</title>
-  <script>
-    var page = 0;
-
-    function get8products(page) {
-      const offset = (page || 0) * 8;
-      const limit = 8;
-      return fetch('http://localhost:3000/api/products?offset=' + offset + '&limit=' + limit).then(
-        function(response) {
-          return response.json();
-        }).then(function(data) {
-          return data;
-        });
-    }
-
-    function displayProducts() {
-      get8products(page).then(function(response) {
-        clearProducts();
-        const products = response.data || [];
-        products.forEach(function(product) {
-          const productsListDomElement = document.getElementById('products');
-          const productDomElement = document.createElement('article');
-          const productName = product.name || '{product name not found}';
-          const productImageUrl = product.image.outfit;
-          const productImage = document.createElement('img');
-          productImage.src = productImageUrl;
-          const productNameTextNode = document.createTextNode(productName)
-          productDomElement.appendChild(productImage);
-          productDomElement.appendChild(productNameTextNode);
-          productsListDomElement.appendChild(productDomElement);
-        });
-      });
-    }
-
-    function clearProducts() {
-      document.getElementById('products').innerHTML = ''; // better way to do this?
-    }
-
-    function nextPage() {
-      page = page + 1;
-      displayProducts();
-    }
-
-    function previousPage() {
-      if (page === 0) {
-        return;
-      } else {
-        page = page - 1;
-        displayProducts();
-      }
-    }
-
-    displayProducts();
-
-  </script>
-  <style>
-
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script> <!--Polyfill for fetch incase you want to view on Safari-->
+  <script src="scripts/main.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:200,500" rel="stylesheet">
+  <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <h1>NET A PORTER</h1>
+  <h1>NET-A-PORTER</h1>
   <h2>What's New</h2>
-  <button onclick="previousPage()">Previous</button>
-  <button onclick="nextPage()">Next</button>
-  <section id='products' class='products'>
-
-  </section>
+  <nav class="navigation">
+    <button class="navigation__button" onclick="previousPage()">Previous</button>
+    <button class="navigation__button" onclick="nextPage()">Next</button>
+  </nav>
+  <section id='products' class='products'></section>
+  <nav class="navigation">
+    <button class="navigation__button" onclick="previousPage()">Previous</button>
+    <button class="navigation__button" onclick="nextPage()">Next</button>
+  </nav>
 </body>
 </html>
