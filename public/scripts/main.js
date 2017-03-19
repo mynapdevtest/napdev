@@ -1,28 +1,18 @@
-let page = 0;
+const state = {
+  page: 0,
+  itemsPerPage: 9
+};
 
-const getProducts = (page, numberOfProducts) => {
-  const offset = (page || 0) * numberOfProducts;
-  const limit = numberOfProducts;
-  return fetch('http://3e279a57.ngrok.io/api/products?offset=' + offset + '&limit=' + limit).then(
-  // return fetch('http://localhost:3000/api/products?offset=' + offset + '&limit=' + limit).then(
-    (response) => {
+const getProducts = () => {
+  const offset = (state.page || 0) * state.itemsPerPage;
+  const limit = state.itemsPerPage;
+  return fetch('http://localhost:3000/api/products?offset=' + offset + '&limit=' + limit).then(
+    response => {
       return response.json();
-    }).then((data) => {
+    }).then(data => {
       return data;
     });
-}
-
-const displayProducts = () => {
-  getProducts(page, 9).then((response) => {
-    clearProducts();
-    const products = response.data || [];
-    products.forEach((product) => {
-      const productsListDomElement = document.getElementById('products');
-      const productPod = createProductPod(product.id, product.name, product.image.outfit, product.price);
-      productsListDomElement.appendChild(productPod);
-    });
-  });
-}
+};
 
 const createProductPod = (id, name, imageUrl, price) => {
   const productDomElement = document.createElement('article');
@@ -47,24 +37,41 @@ const createProductPod = (id, name, imageUrl, price) => {
   productDomElement.appendChild(productImageElement);
 
   return productDomElement;
-}
+};
 
 const clearProducts = () => {
   document.getElementById('products').innerHTML = ''; // better way to do this?
-}
+};
+
+const updatePageNumber = () => {
+  document.getElementById('page-number').innerHTML = state.page + 1;
+};
+
+const displayProducts = () => {
+  getProducts().then(response => {
+    clearProducts();
+    updatePageNumber();
+    const products = response.data || [];
+    products.forEach(product => {
+      const productsListDomElement = document.getElementById('products');
+      const productPod = createProductPod(product.id, product.name, product.image.outfit, product.price);
+      productsListDomElement.appendChild(productPod);
+    });
+  });
+};
 
 const nextPage = () => {
-  page = page + 1;
+  state.page = state.page + 1;
   displayProducts();
-}
+};
 
 const previousPage = () => {
-  if (page === 0) {
+  if (state.page === 0) {
     return;
   } else {
-    page = page - 1;
+    state.page = state.page - 1;
     displayProducts();
   }
-}
+};
 
 displayProducts();
