@@ -32,9 +32,13 @@ const createProductPod = (id, name, imageUrl, price) => {
   productImageElement.className = 'products__product__preview-image';
   productImageElement.src = imageUrl;
 
+  const linkToProductElement = document.createElement('a');
+  linkToProductElement.href = 'product.html?productId=' + id;
+  linkToProductElement.appendChild(productImageElement);
+
   productDomElement.appendChild(productNameElement);
   productDomElement.appendChild(priceElement);
-  productDomElement.appendChild(productImageElement);
+  productDomElement.appendChild(linkToProductElement);
 
   return productDomElement;
 };

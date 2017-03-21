@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NET-A-PORTER webdev test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="scripts/polyfills/fetch.js"></script> <!--Polyfill for fetch incase you want to view on Safari-->
+  <script src="scripts/polyfills/url-search-params.js"></script> <!--Polyfill for URLSearchParams incase you want to view on Safari-->
+  <script src="scripts/product.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:200,500" rel="stylesheet">
+  <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <h1>NET-A-PORTER</h1>
+  <section id='product' class='product'>
+    <h2 id='product-name'>{product-name}</h2>
+    <h3 id='product-price'>{price}</h3>
+    <p id='product-designer'>{designer}</p>
+    <img id='product-image-small' class="product__image product__image--active" src="" />
+    <img id='product-image-outfit' class="product__image" src="" />
+    <img id='product-image-large' class="product__image" src="" />
+  </section>
+  <a href='/'>Back</a>
+</body>
+</html>
