@@ -11,7 +11,10 @@ const getProducts = () => {
   const limit = state.itemsPerPage;
   return fetch(`http://localhost:3000/api/products?offset=${offset}&limit=${limit}`)
     .then(response => {
-      return response.json();
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("Error fetching catalogue");
     })
     .then(data => {
       return data;
@@ -19,24 +22,24 @@ const getProducts = () => {
 };
 
 const createProductPod = (id, name, imageUrl, price) => {
-  const productDomElement = document.createElement('article');
-  productDomElement.className = 'products__product';
+  const productDomElement = document.createElement("article");
+  productDomElement.className = "products__product";
 
-  const productName = document.createTextNode(name || '{product name not found}');
-  const productNameElement = document.createElement('h3');
-  productNameElement.className = 'products__product__name';
+  const productName = document.createTextNode(name || "{product name not found}");
+  const productNameElement = document.createElement("h3");
+  productNameElement.className = "products__product__name";
   productNameElement.appendChild(productName);
 
   const priceText = document.createTextNode(price);
-  const priceElement = document.createElement('p');
-  priceElement.className = 'products__product__price';
+  const priceElement = document.createElement("p");
+  priceElement.className = "products__product__price";
   priceElement.appendChild(priceText);
 
-  const productImageElement = document.createElement('img');
-  productImageElement.className = 'products__product__preview-image';
+  const productImageElement = document.createElement("img");
+  productImageElement.className = "products__product__preview-image";
   productImageElement.src = imageUrl;
 
-  const linkToProductElement = document.createElement('a');
+  const linkToProductElement = document.createElement("a");
   linkToProductElement.href = `product.html?productId=${id}&returnToPage=${state.page}`;
   linkToProductElement.appendChild(productImageElement);
 
@@ -48,11 +51,11 @@ const createProductPod = (id, name, imageUrl, price) => {
 };
 
 const clearProducts = () => {
-  document.getElementById('products').innerHTML = '';
+  document.getElementById("products").innerHTML = "";
 };
 
 const updatePageNumber = () => {
-  document.getElementById('page-number').innerHTML = state.page;
+  document.getElementById("page-number").innerHTML = state.page;
 };
 
 const displayProducts = () => {
@@ -60,18 +63,24 @@ const displayProducts = () => {
     clearProducts();
     updatePageNumber();
     const products = response.data || [];
+    const productsListDomElement = document.getElementById("products");
     products.forEach(product => {
-      const productsListDomElement = document.getElementById('products');
       const productPod = createProductPod(product.id, product.name, product.image.outfit, product.price);
       productsListDomElement.appendChild(productPod);
     });
     scroll(0,0);
-  });
+  })
+    .catch(error => {
+      console.error(error);
+      state.page = 1;
+      updateUrlPageNumber();
+      displayProducts();
+    });
 };
 
 const updateUrlPageNumber = () => {
   const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?page=${state.page}`;
-  window.history.pushState({path:newUrl},'',newUrl);
+  window.history.pushState({path:newUrl},"",newUrl);
 };
 
 const nextPage = () => {
