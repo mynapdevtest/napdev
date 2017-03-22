@@ -11,25 +11,39 @@ const renderProduct = (name, price, designer, images, badges) => {
 
 const getProduct = () => {
   const productId = urlParams.get('productId');
-
   if (!productId) {
     return; // No product specified. Could render error.
   }
 
-  // return fetch(`http://localhost:3000/api/product/${productId}`)
-  return fetch(`http://181fb849.ngrok.io/api/product/${productId}`)
+  return fetch(`http://localhost:3000/api/product/${productId}`)
     .then(response => {
       return response.json();
     })
     .then(data => {
-      console.log(data);
       if (data.error) {
         // Product not found / other error. Render error.
-        return document.getElementById('product').innerHTML = "Product not found";
+        return document.getElementById('product').innerHTML = "<h3>Product not found</h3><a href=\"index.html\">&#60; Return to product catalogue</a>";
       }
-
       return renderProduct(data.name, data.price, data.designer, data.images, data.badges);
     })
 };
 
+const showImage = (imageId) => {
+  const productImages = document.getElementsByClassName('product__images__image');
+
+  Array.prototype.forEach.call(productImages, image => {
+    image.classList.remove('product__images__image--active');
+  });
+
+  document.getElementById(imageId).classList.add('product__images__image--active');
+}
+
+const setBackButtonPage = () => {
+  const page = urlParams.get('returnToPage');
+  if (page) {
+    document.getElementById('back-button').href = `index.html?page=${page}`;
+  }
+};
+
 getProduct();
+setBackButtonPage();

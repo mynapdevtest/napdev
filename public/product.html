@@ -5,20 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="scripts/polyfills/fetch.js"></script> <!--Polyfill for fetch incase you want to view on Safari-->
   <script src="scripts/polyfills/url-search-params.js"></script> <!--Polyfill for URLSearchParams incase you want to view on Safari-->
-  <script src="scripts/product.js"></script>
   <link href="https://fonts.googleapis.com/css?family=Raleway:200,500" rel="stylesheet">
   <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-  <h1>NET-A-PORTER</h1>
+  <a href="index.html"><h1>NET-A-PORTER</h1></a>
   <section id='product' class='product'>
-    <h2 id='product-name'>{product-name}</h2>
-    <h3 id='product-price'>{price}</h3>
-    <p id='product-designer'>{designer}</p>
-    <img id='product-image-small' class="product__image product__image--active" src="" />
-    <img id='product-image-outfit' class="product__image" src="" />
-    <img id='product-image-large' class="product__image" src="" />
+    <a id='back-button' class="product__back" href="index.html">&#60; back to products</a>
+    <h2 id='product-name'>&nbsp;</h2>
+    <h3 id='product-price'>&nbsp;</h3>
+    <p id='product-designer'>&nbsp;</p>
+    <div class='product__image-select'>
+      <button class='product__image-select__button' onclick="showImage('product-image-small')">small</button>
+      <button class='product__image-select__button' onclick="showImage('product-image-outfit')">outfit</button>
+      <button class='product__image-select__button' onclick="showImage('product-image-large')">large</button>
+    </div>
+    <div class="product__images">
+      <img id='product-image-small' class="product__images__image product__images__image--active" src="" />
+      <img id='product-image-outfit' class="product__images__image" src="" />
+      <img id='product-image-large' class="product__images__image" src="" />
+    </div>
   </section>
-  <a href='/'>Back</a>
+  <script src="scripts/product.js"></script>
 </body>
 </html>

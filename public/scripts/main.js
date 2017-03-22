@@ -1,15 +1,19 @@
+const urlParams = new URLSearchParams(window.location.search);
+const pageNumberQueryParam = Number(urlParams.get('page'));
+
 const state = {
-  page: 0,
+  page: pageNumberQueryParam >= 1 ? pageNumberQueryParam : 1,
   itemsPerPage: 9
 };
 
 const getProducts = () => {
-  const offset = (state.page || 0) * state.itemsPerPage;
+  const offset = (state.page - 1) * state.itemsPerPage;
   const limit = state.itemsPerPage;
-  return fetch('http://localhost:3000/api/products?offset=' + offset + '&limit=' + limit).then(
-    response => {
+  return fetch(`http://localhost:3000/api/products?offset=${offset}&limit=${limit}`)
+    .then(response => {
       return response.json();
-    }).then(data => {
+    })
+    .then(data => {
       return data;
     });
 };
@@ -33,7 +37,7 @@ const createProductPod = (id, name, imageUrl, price) => {
   productImageElement.src = imageUrl;
 
   const linkToProductElement = document.createElement('a');
-  linkToProductElement.href = 'product.html?productId=' + id;
+  linkToProductElement.href = `product.html?productId=${id}&returnToPage=${state.page}`;
   linkToProductElement.appendChild(productImageElement);
 
   productDomElement.appendChild(productNameElement);
@@ -44,11 +48,11 @@ const createProductPod = (id, name, imageUrl, price) => {
 };
 
 const clearProducts = () => {
-  document.getElementById('products').innerHTML = ''; // better way to do this?
+  document.getElementById('products').innerHTML = '';
 };
 
 const updatePageNumber = () => {
-  document.getElementById('page-number').innerHTML = state.page + 1;
+  document.getElementById('page-number').innerHTML = state.page;
 };
 
 const displayProducts = () => {
@@ -61,19 +65,27 @@ const displayProducts = () => {
       const productPod = createProductPod(product.id, product.name, product.image.outfit, product.price);
       productsListDomElement.appendChild(productPod);
     });
+    scroll(0,0);
   });
+};
+
+const updateUrlPageNumber = () => {
+  const newUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?page=${state.page}`;
+  window.history.pushState({path:newUrl},'',newUrl);
 };
 
 const nextPage = () => {
   state.page = state.page + 1;
+  updateUrlPageNumber();
   displayProducts();
 };
 
 const previousPage = () => {
-  if (state.page === 0) {
+  if (state.page === 1) {
     return;
   } else {
     state.page = state.page - 1;
+    updateUrlPageNumber();
     displayProducts();
   }
 };
